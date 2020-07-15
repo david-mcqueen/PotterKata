@@ -13,6 +13,7 @@ namespace TestPointOfSaleSystem
         [SetUp]
         public void Setup()
         {
+            // Clear out the basket for each test
             Basket.Instance.Dispose();
         }
 
@@ -28,7 +29,7 @@ namespace TestPointOfSaleSystem
             var bk = new Book1();
             Basket.Instance.AddItemToBasket(bk);
 
-            var cart = Basket.Instance.Cart;
+            var cart = Basket.Instance.Items;
             Assert.AreEqual(1, cart.Count);
             Assert.AreEqual(bk, cart.First().Key);
         }
@@ -44,7 +45,7 @@ namespace TestPointOfSaleSystem
             var bk2 = new Book2();
             Basket.Instance.AddItemToBasket(bk2);
 
-            var cart = Basket.Instance.Cart;
+            var cart = Basket.Instance.Items;
             
             Assert.AreEqual(2, cart.Count); // 2 unique records in the cart
 
@@ -66,7 +67,7 @@ namespace TestPointOfSaleSystem
         }
 
         [Test]
-        public void GetCostOfBasketMultipleItems()
+        public void GetCostOfBasketForMultipleItems()
         {
             var bk1 = new Book1();
 
