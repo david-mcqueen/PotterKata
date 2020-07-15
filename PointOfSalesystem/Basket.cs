@@ -2,6 +2,7 @@
 using PointOfSalesystem.Inventory.HarryPotter;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PointOfSalesystem
 {
@@ -9,7 +10,7 @@ namespace PointOfSalesystem
     {
         public static Basket Instance { get; } = new Basket();
 
-        public Dictionary<IStockItem, int> Items { get; private set; }
+        public Dictionary<string, Stack<IStockItem>> Items { get; private set; }
         private bool recalculateTotel = false;
 
         private double _totalCost { get; set; }
@@ -29,17 +30,19 @@ namespace PointOfSalesystem
 
         private Basket()
         {
-            Items = new Dictionary<IStockItem, int>();
+            Items = new Dictionary<string, Stack<IStockItem>>();
         }
 
         public void AddItemToBasket(IStockItem item)
         {
-            if (!Items.TryGetValue(item, out int value))
+            if (!Items.TryGetValue(item.ProductCode, out Stack<IStockItem> value))
             {
-                Items.Add(item, 1);
+                var newStack = new Stack<IStockItem>();
+                newStack.Push(item);
+                Items.Add(item.ProductCode, newStack);
             } else
             {
-                Items[item] = value + 1;
+                value.Push(item);
             }
 
             recalculateTotel = true;
@@ -56,7 +59,7 @@ namespace PointOfSalesystem
                     //TODO:-  Is a Potter book, so would be eligible for a discount
 
                 }
-                cost += (basketItem.Key.Price * basketItem.Value);
+                cost += basketItem.Value.Sum(i => i.Price);
             }
 
             return cost;

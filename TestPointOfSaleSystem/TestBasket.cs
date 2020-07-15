@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using PointOfSalesystem;
+using PointOfSalesystem.Inventory;
 using PointOfSalesystem.Inventory.HarryPotter;
 using System;
 using System.Collections.Generic;
@@ -31,7 +32,7 @@ namespace TestPointOfSaleSystem
 
             var cart = Basket.Instance.Items;
             Assert.AreEqual(1, cart.Count);
-            Assert.AreEqual(bk, cart.First().Key);
+            Assert.AreEqual(bk.ProductCode, cart.First().Key);
         }
 
         [Test]
@@ -49,11 +50,11 @@ namespace TestPointOfSaleSystem
             
             Assert.AreEqual(2, cart.Count); // 2 unique records in the cart
 
-            Assert.IsTrue(cart.TryGetValue(bk1, out int bk1Count));
-            Assert.AreEqual(2, bk1Count); // x2 of book1
+            Assert.IsTrue(cart.TryGetValue(bk1.ProductCode, out Stack<IStockItem> bk1Count));
+            Assert.AreEqual(2, bk1Count.Count); // x2 of book1
 
-            Assert.IsTrue(cart.TryGetValue(bk2, out int bk2Count));
-            Assert.AreEqual(1, bk2Count); // x1 of book2
+            Assert.IsTrue(cart.TryGetValue(bk2.ProductCode, out Stack<IStockItem> bk2Count));
+            Assert.AreEqual(1, bk2Count.Count); // x1 of book2
 
         }
 

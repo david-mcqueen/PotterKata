@@ -4,7 +4,7 @@ using System.Text;
 
 namespace PointOfSalesystem.Inventory
 {
-    public interface IStockItem: IEqualityComparer<IStockItem>
+    public interface IStockItem
     {
         string ProductCode { get; set; }
         double Price { get; set; }
