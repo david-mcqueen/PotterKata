@@ -6,8 +6,7 @@ namespace PointOfSalesystem
 {
     public class Basket: IDisposable
     {
-        private static readonly Basket _instance = new Basket();
-        public static Basket Instance => _instance;
+        public static Basket Instance { get; } = new Basket();
 
         public Dictionary<IStockItem, int> Items { get; private set; }
         private bool recalculateTotel = false;
@@ -17,7 +16,6 @@ namespace PointOfSalesystem
         {
             get
             {
-
                 // Only recalculate if an item has changed
                 if (recalculateTotel)
                 {
@@ -25,7 +23,6 @@ namespace PointOfSalesystem
                 }
 
                 return _totalCost;
-
             }
         }
 
@@ -51,9 +48,9 @@ namespace PointOfSalesystem
         private double CalculateBasketTotal()
         {
             double cost = 0;
-            foreach (var item in Items)
+            foreach (var basketItem in Items)
             {
-                cost += (item.Key.Price * item.Value);
+                cost += (basketItem.Key.Price * basketItem.Value);
             }
 
             return cost;
@@ -61,9 +58,8 @@ namespace PointOfSalesystem
 
         public void Dispose()
         {
-            Items = new Dictionary<IStockItem, int>();
+            Items.Clear();
             recalculateTotel = true;
         }
-
     }
 }
