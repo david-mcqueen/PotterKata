@@ -4,7 +4,7 @@ using System.Text;
 
 namespace PointOfSalesystem.Inventory.HarryPotter
 {
-    interface IPotterCollection
+    public interface IPotterCollection
     {
     }
 }

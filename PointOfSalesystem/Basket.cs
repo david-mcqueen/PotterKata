@@ -1,4 +1,5 @@
 ﻿using PointOfSalesystem.Inventory;
+using PointOfSalesystem.Inventory.HarryPotter;
 using System;
 using System.Collections.Generic;
 
@@ -50,6 +51,11 @@ namespace PointOfSalesystem
             double cost = 0;
             foreach (var basketItem in Items)
             {
+                if (typeof(IPotterCollection).IsAssignableFrom(basketItem.GetType()))
+                {
+                    //TODO:-  Is a Potter book, so would be eligible for a discount
+
+                }
                 cost += (basketItem.Key.Price * basketItem.Value);
             }
 
