@@ -73,12 +73,19 @@ namespace TestPointOfSaleSystem
             var bk1 = new Book1();
 
             Basket.Instance.AddItemToBasket(bk1);
-            Basket.Instance.AddItemToBasket(bk1);
+            Basket.Instance.AddItemToBasket(bk1); // Book not eligible for discount
 
             var bk2 = new Book2();
             Basket.Instance.AddItemToBasket(bk2);
 
-            Assert.AreEqual(24.0, Basket.Instance.TotalCost);
+            // 2 books eligiable for discount
+            // 2 * 8 = £16 * 0.95 = £15.2
+
+            // 1 book not eligible for discount
+            // 1 * 8 = £8
+
+            // Total Cost: £15.2 + £8 = £23.2
+            Assert.AreEqual(23.2, Basket.Instance.TotalCost);
         }
     }
 }

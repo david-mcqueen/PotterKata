@@ -1,4 +1,5 @@
-﻿using PointOfSalesystem.Inventory;
+﻿using PointOfSalesystem.DiscountCalculator;
+using PointOfSalesystem.Inventory;
 using PointOfSalesystem.Inventory.HarryPotter;
 using System;
 using System.Collections.Generic;
@@ -52,17 +53,23 @@ namespace PointOfSalesystem
         private double CalculateBasketTotal()
         {
             double cost = 0;
-            foreach (var basketItem in Items)
+            
+            // TODO:- Allow for other IDiscountCalculator
+            var discountcalculator = new HarryPotterDiscountCalculator();
+
+            foreach (var basketItemStack in Items)
             {
-                if (typeof(IPotterCollection).IsAssignableFrom(basketItem.GetType()))
+
+                if (typeof(IPotterCollection).IsAssignableFrom(basketItemStack.Value.First().GetType()))
                 {
                     //TODO:-  Is a Potter book, so would be eligible for a discount
+                    discountcalculator.ConsiderItemForDiscount(basketItemStack);
 
                 }
-                cost += basketItem.Value.Sum(i => i.Price);
+                cost += basketItemStack.Value.Sum(i => i.Price);
             }
 
-            return cost;
+            return cost - discountcalculator.TotalDiscount;
         }
 
         public void Dispose()

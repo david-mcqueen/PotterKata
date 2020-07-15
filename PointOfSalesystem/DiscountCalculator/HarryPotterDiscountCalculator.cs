@@ -18,21 +18,13 @@ namespace PointOfSalesystem.DiscountCalculator
 
         // TODO:- Make Generic?
 
-        public void ConsiderItemForDiscount(IStockItem item)
+        public void ConsiderItemForDiscount(KeyValuePair<string, Stack<IStockItem>> item)
         {
             // Only concerned with IPotterCollection items
-            if (typeof(IPotterCollection).IsAssignableFrom(item.GetType()))
+            if (typeof(IPotterCollection).IsAssignableFrom(item.Value.First().GetType()))
             {
-                if (!_items.TryGetValue(item.ProductCode, out Stack<IStockItem> value))
-                {
-                    var newStack = new Stack<IStockItem>();
-                    newStack.Push(item);
-                    _items.Add(item.ProductCode, newStack);
-                }
-                else
-                {
-                    value.Push(item);
-                }
+
+                _items.Add(item.Key, item.Value);
 
                 recalculateTotel = true;
             }
@@ -56,27 +48,30 @@ namespace PointOfSalesystem.DiscountCalculator
 
             // Total cost of the items in this stack
             var stackCost = stack.Sum(i => i.Price);
+            var stackDiscount = 0.0;
 
+
+            // Calculate the *DISCOUNT* which is applied to the stack of books (not the price after discount)
             switch (stack.Count)
             {
                 case 5:
-                    stackCost *= 0.25;
+                    stackDiscount = stackCost * 0.25;
                     break;
                 case 4:
-                    stackCost *= 0.2;
+                    stackDiscount = stackCost * 0.2;
                     break;
                 case 3:
-                    stackCost *= 0.1;
+                    stackDiscount = stackCost * 0.1;
                     break;
                 case 2:
-                    stackCost *= 0.05;
+                    stackDiscount = stackCost * 0.05;
                     break;
                 default:
-                    stackCost = 0;
+                    stackDiscount = 0.0;
                     break;
             }
 
-            return Math.Round((double)stackCost, 2);
+            return Math.Round((double)stackDiscount, 2);
         }
 
         private double CalculateTotalDiscount()

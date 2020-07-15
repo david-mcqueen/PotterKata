@@ -7,7 +7,7 @@ namespace PointOfSalesystem.DiscountCalculator
 {
     interface IDiscountCalculator
     {
-        void ConsiderItemForDiscount(IStockItem item);
+        void ConsiderItemForDiscount(KeyValuePair<string, Stack<IStockItem>> item);
         double TotalDiscount { get; }
     }
 }
