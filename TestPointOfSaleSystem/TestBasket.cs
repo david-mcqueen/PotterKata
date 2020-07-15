@@ -13,6 +13,7 @@ namespace TestPointOfSaleSystem
         [SetUp]
         public void Setup()
         {
+            Basket.Instance.Dispose();
         }
 
         [Test]
@@ -29,7 +30,7 @@ namespace TestPointOfSaleSystem
 
             var cart = Basket.Instance.Cart;
             Assert.AreEqual(1, cart.Count);
-            Assert.AreEqual(bk.ProductCode, cart.First().Key);
+            Assert.AreEqual(bk, cart.First().Key);
         }
 
         [Test]
@@ -47,12 +48,35 @@ namespace TestPointOfSaleSystem
             
             Assert.AreEqual(2, cart.Count); // 2 unique records in the cart
 
-            Assert.IsTrue(cart.TryGetValue(bk1.ProductCode, out int bk1Count)); 
+            Assert.IsTrue(cart.TryGetValue(bk1, out int bk1Count));
             Assert.AreEqual(2, bk1Count); // x2 of book1
 
-            Assert.IsTrue(cart.TryGetValue(bk2.ProductCode, out int bk2Count));
+            Assert.IsTrue(cart.TryGetValue(bk2, out int bk2Count));
             Assert.AreEqual(1, bk2Count); // x1 of book2
 
+        }
+
+        [Test]
+        public void GetCostOfBasket()
+        {
+            var bk1 = new Book1();
+            Basket.Instance.AddItemToBasket(bk1);
+
+            Assert.AreEqual(8.0, Basket.Instance.TotalCost);
+        }
+
+        [Test]
+        public void GetCostOfBasketMultipleItems()
+        {
+            var bk1 = new Book1();
+
+            Basket.Instance.AddItemToBasket(bk1);
+            Basket.Instance.AddItemToBasket(bk1);
+
+            var bk2 = new Book2();
+            Basket.Instance.AddItemToBasket(bk2);
+
+            Assert.AreEqual(24.0, Basket.Instance.TotalCost);
         }
     }
 }
