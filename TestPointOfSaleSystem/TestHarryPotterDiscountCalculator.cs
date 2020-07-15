@@ -4,7 +4,7 @@ using PointOfSalesystem.Inventory.HarryPotter;
 
 namespace TestPointOfSaleSystem
 {
-    public class TestHarryPotterDiscountValidator
+    public class TestHarryPotterDiscountCalculator
     {
         [SetUp]
         public void Setup()
