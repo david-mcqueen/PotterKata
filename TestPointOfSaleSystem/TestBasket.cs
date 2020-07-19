@@ -87,5 +87,35 @@ namespace TestPointOfSaleSystem
             // Total Cost: £15.2 + £8 = £23.2
             Assert.AreEqual(23.2, Basket.Instance.TotalCost);
         }
+
+        [Test]
+        public void ItDoesntGiveDiscountToNonEligiableBooks()
+        {
+            var book = new PointOfSalesystem.Inventory.DanBrown.Book1();
+            Basket.Instance.AddItemToBasket(book); // !Potter book
+
+            Basket.Instance.AddItemToBasket(new Book1()); // Potter book
+
+            Assert.AreEqual(16, Basket.Instance.TotalCost);
+        }
+
+        [Test]
+        public void ItDoesntGiveDiscountToNonEligiableBooks_ContainsValidDiscount()
+        {
+            var book = new PointOfSalesystem.Inventory.DanBrown.Book1();
+            Basket.Instance.AddItemToBasket(book); // !Potter book
+
+            Basket.Instance.AddItemToBasket(new Book1()); // Potter book 1
+            Basket.Instance.AddItemToBasket(new Book2()); // Potter book 2
+
+            // 2 books eligiable for discount
+            // 2 * 8 = £16 * 0.95 = £15.2
+
+            // 1 book not eligible for discount
+            // 1 * 8 = £8
+
+            // Total Cost: £15.2 + £8 = £23.2
+            Assert.AreEqual(23.2, Basket.Instance.TotalCost);
+        }
     }
 }
