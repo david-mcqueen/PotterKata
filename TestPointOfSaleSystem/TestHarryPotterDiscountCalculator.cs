@@ -54,6 +54,26 @@ namespace TestPointOfSaleSystem
         }
 
         [Test]
+        public void ItGivesDiscountForNonSequentialBooksBooks()
+        {
+            var validator = new HarryPotterDiscountCalculator();
+
+            var bk1Stack = new Stack<IStockItem>();
+            bk1Stack.Push(new Book1());
+            var kvp = new KeyValuePair<string, Stack<IStockItem>>(new Book1().ProductCode, bk1Stack);
+            validator.ConsiderItemForDiscount(kvp);
+
+            var bk3Stack = new Stack<IStockItem>();
+            bk3Stack.Push(new Book3());
+            var kvp3 = new KeyValuePair<string, Stack<IStockItem>>(new Book3().ProductCode, bk3Stack);
+            validator.ConsiderItemForDiscount(kvp3);
+
+            // 2 * £8 = £16 * 0.05 = £ 0.8 discount
+
+            Assert.AreEqual(0.8, validator.TotalDiscount);
+        }
+
+        [Test]
         public void ItDoesntGivesDiscountFor2SameBooks()
         {
             var validator = new HarryPotterDiscountCalculator();
@@ -68,6 +88,29 @@ namespace TestPointOfSaleSystem
             // 2 * £8 = £16 * 0 = £ 0 discount
 
             Assert.AreEqual(0, validator.TotalDiscount);
+        }
+
+
+        [Test]
+        public void ItGivesDiscountMultipleTimes()
+        {
+            var validator = new HarryPotterDiscountCalculator();
+
+            var bk1Stack = new Stack<IStockItem>();
+            bk1Stack.Push(new Book1());
+            bk1Stack.Push(new Book1());
+            var kvp = new KeyValuePair<string, Stack<IStockItem>>(new Book1().ProductCode, bk1Stack);
+            validator.ConsiderItemForDiscount(kvp);
+
+            var bk2Stack = new Stack<IStockItem>();
+            bk2Stack.Push(new Book2());
+            bk2Stack.Push(new Book2());
+            var kvp2 = new KeyValuePair<string, Stack<IStockItem>>(new Book2().ProductCode, bk2Stack);
+            validator.ConsiderItemForDiscount(kvp2);
+
+            // 2 * £8 = £16 * 0.05 = £ 0.8 discount [Twice] = £1.60
+
+            Assert.AreEqual(1.6, validator.TotalDiscount);
         }
 
         [Test]
