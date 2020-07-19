@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PointOfSalesystem.DiscountCalculator
 {
-    interface IDiscountCalculator
+    public interface IDiscountCalculator
     {
         void ConsiderItemForDiscount(KeyValuePair<string, Stack<IStockItem>> item);
         double TotalDiscount { get; }

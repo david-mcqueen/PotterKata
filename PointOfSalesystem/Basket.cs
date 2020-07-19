@@ -53,23 +53,23 @@ namespace PointOfSalesystem
         private double CalculateBasketTotal()
         {
             double cost = 0;
-            
-            // TODO:- Allow for other IDiscountCalculator
-            var discountcalculator = new HarryPotterDiscountCalculator();
+
+            // Allow for other IDiscountCalculator
+            var discountFactory = new DiscountFactory();
 
             foreach (var basketItemStack in Items)
             {
-
-                if (typeof(IPotterCollection).IsAssignableFrom(basketItemStack.Value.First().GetType()))
+                if (discountFactory.TryGetCalculator(basketItemStack.Value.First().GetType(), out IDiscountCalculator discountCalculator))
                 {
-                    //TODO:-  Is a Potter book, so would be eligible for a discount
-                    discountcalculator.ConsiderItemForDiscount(basketItemStack);
-
+                    discountCalculator.ConsiderItemForDiscount(basketItemStack);
                 }
                 cost += basketItemStack.Value.Sum(i => i.Price);
             }
 
-            return cost - discountcalculator.TotalDiscount;
+            var totalDiscount = discountFactory.GetCalculators().Sum(c => c.TotalDiscount);
+
+            return cost - totalDiscount;
+            
         }
 
         public void Dispose()

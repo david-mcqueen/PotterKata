@@ -16,8 +16,6 @@ namespace PointOfSalesystem.DiscountCalculator
             _items = new Dictionary<string, Stack<IStockItem>>();
         }
 
-        // TODO:- Make Generic?
-
         public void ConsiderItemForDiscount(KeyValuePair<string, Stack<IStockItem>> item)
         {
             // Only concerned with IPotterCollection items
