@@ -117,5 +117,31 @@ namespace TestPointOfSaleSystem
             // Total Cost: £15.2 + £8 = £23.2
             Assert.AreEqual(23.2, Basket.Instance.TotalCost);
         }
+
+        [Test]
+        public void ItGivesTotalCostForExample()
+        {
+            // 2 copies of the first book
+            Basket.Instance.AddItemToBasket(new Book1());
+            Basket.Instance.AddItemToBasket(new Book1());
+
+            // 2 copies of the second book
+            Basket.Instance.AddItemToBasket(new Book2());
+            Basket.Instance.AddItemToBasket(new Book2());
+
+            // 2 copies of the third book
+            Basket.Instance.AddItemToBasket(new Book3());
+            Basket.Instance.AddItemToBasket(new Book3());
+
+            // 1 copy of the fourth book
+            Basket.Instance.AddItemToBasket(new Book4());
+
+            // 1 copy of the fifth book
+            Basket.Instance.AddItemToBasket(new Book5());
+
+            // Total cost before discount is £64
+            // Total cost after discount is £51.60
+            Assert.AreEqual(51.60, Basket.Instance.TotalCost);
+        }
     }
 }
