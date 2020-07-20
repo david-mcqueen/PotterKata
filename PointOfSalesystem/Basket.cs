@@ -9,6 +9,9 @@ namespace PointOfSalesystem
 {
     public class Basket: IDisposable
     {
+        /// <summary>
+        /// Singleton
+        /// </summary>
         public static Basket Instance { get; } = new Basket();
 
         public Dictionary<string, Stack<IStockItem>> Items { get; private set; }
@@ -23,6 +26,7 @@ namespace PointOfSalesystem
                 if (recalculateTotel)
                 {
                     _totalCost = CalculateBasketTotal();
+                    recalculateTotel = false;
                 }
 
                 return _totalCost;
@@ -34,6 +38,10 @@ namespace PointOfSalesystem
             Items = new Dictionary<string, Stack<IStockItem>>();
         }
 
+        /// <summary>
+        /// Adds an item to the basket
+        /// </summary>
+        /// <param name="item">An item to add to the basket</param>
         public void AddItemToBasket(IStockItem item)
         {
             if (!Items.TryGetValue(item.ProductCode, out Stack<IStockItem> value))
@@ -49,7 +57,10 @@ namespace PointOfSalesystem
             recalculateTotel = true;
         }
 
-
+        /// <summary>
+        /// Gives a total cost for all items in the basket, after eligible discounts have been applied
+        /// </summary>
+        /// <returns>Total cost</returns>
         private double CalculateBasketTotal()
         {
             double cost = 0;
